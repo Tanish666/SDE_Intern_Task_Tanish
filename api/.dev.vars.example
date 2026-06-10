@@ -1,0 +1,4 @@
+# Copy this file to `.dev.vars` for local development (`pnpm dev`).
+# `.dev.vars` is gitignored; this example is committed so a fresh clone works.
+# In production, set the real value with: wrangler secret put SESSION_SECRET
+SESSION_SECRET=dev-only-insecure-secret-change-me

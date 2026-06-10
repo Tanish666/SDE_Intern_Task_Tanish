@@ -9,8 +9,11 @@ import { useRequireAuth, useLogout } from "../lib/useAuth"
 // Custom inline SVG icons for premium visual aesthetics and zero dependencies
 function IconDashboard({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-layout-collage">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
+      <path d="M10 4l4 16" />
+      <path d="M12 12l-8 2" />
     </svg>
   )
 }
@@ -25,16 +28,26 @@ function IconResponses({ className = "h-5 w-5" }) {
 
 function IconAnalytics({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" />
+    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-device-analytics">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1l0 -10" />
+      <path d="M7 20l10 0" />
+      <path d="M9 16l0 4" />
+      <path d="M15 16l0 4" />
+      <path d="M8 12l3 -3l2 2l3 -3" />
     </svg>
   )
 }
 
 function IconTemplates({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-template">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M4 5a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1l0 -2" />
+      <path d="M4 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6" />
+      <path d="M14 12l6 0" />
+      <path d="M14 16l6 0" />
+      <path d="M14 20l6 0" />
     </svg>
   )
 }
@@ -229,11 +242,10 @@ export function DashboardPage() {
               setActiveTab(link.id)
               setMobileSidebarOpen(false)
             }}
-            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === link.id
-                ? "bg-brand-500 text-white shadow-md shadow-brand-500/20"
-                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-            }`}
+            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === link.id
+              ? "bg-brand-500 text-white shadow-md shadow-brand-500/20"
+              : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+              }`}
           >
             {link.icon}
             {link.label}
@@ -272,7 +284,7 @@ export function DashboardPage() {
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between px-3">
                 <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">Teammates</p>
-                <button 
+                <button
                   onClick={() => alert("Add collaborator feature is under development!")}
                   className="text-slate-500 hover:text-brand-400 p-0.5"
                   title="Invite Teammate"
@@ -323,11 +335,10 @@ export function DashboardPage() {
           <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 mb-1">Preferences</p>
           <button
             onClick={() => setActiveTab("settings")}
-            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === "settings"
-                ? "bg-slate-800 text-slate-100"
-                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-            }`}
+            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === "settings"
+              ? "bg-slate-800 text-slate-100"
+              : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+              }`}
           >
             <IconSettings />
             Settings
@@ -451,7 +462,7 @@ export function DashboardPage() {
           <div className="flex items-center gap-6 text-sm">
             {/* User Profile display */}
             <div className="flex items-center gap-3 border-l border-slate-900 pl-6">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-brand-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow shadow-indigo-950">
+              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white font-bold text-xs flex items-center justify-center shadow shadow-brand-950/40">
                 {userInitial}
               </div>
               <div className="text-left hidden lg:block">
@@ -469,7 +480,7 @@ export function DashboardPage() {
               {/* Left Column: Welcome, Stats & Surveys Grid (Col-Span 2) */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Gradient Welcome Banner */}
-                <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-indigo-750 rounded-2xl p-6 md:p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-950/20 group">
+                <div className="bg-gradient-to-r from-brand-700 via-brand-600 to-emerald-800 rounded-2xl p-6 md:p-8 text-white relative overflow-hidden shadow-xl shadow-emerald-950/20 group">
                   {/* Subtle Vector Background Graphics */}
                   <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 pointer-events-none transition group-hover:scale-110 duration-700">
                     <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -480,22 +491,23 @@ export function DashboardPage() {
 
                   <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                      <p className="text-xs font-extrabold tracking-widest text-indigo-200 uppercase mb-1">ONLINE FEEDBACK</p>
+                      <p className="text-xs font-extrabold tracking-widest text-brand-200 uppercase mb-1">ONLINE FEEDBACK</p>
                       <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-2">
                         Welcome back, {profileName.split(" ")[0]} 👋
                       </h2>
-                      <p className="text-xs md:text-sm text-indigo-100 max-w-md leading-relaxed">
+                      <p className="text-xs md:text-sm text-emerald-50 max-w-md leading-relaxed">
                         Gather feedback and analyze responses with Formly's interactive suite. Paint it in your brand color and start collecting data.
                       </p>
                     </div>
-                    <Button
+                    <button
+                      type="button"
                       onClick={() => createSurvey.mutate(undefined)}
                       disabled={createSurvey.isPending}
-                      className="bg-white text-indigo-950 hover:bg-slate-100 px-6 py-2.5 font-bold rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-indigo-950/30 transition transform hover:-translate-y-0.5 shrink-0"
+                      className="bg-white text-slate-950 hover:bg-slate-50 px-6 py-2.5 font-bold rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-black/10 transition transform hover:-translate-y-0.5 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       <IconPlus className="h-4 w-4 stroke-[3]" />
                       New Survey
-                    </Button>
+                    </button>
                   </div>
                 </div>
 
@@ -519,7 +531,7 @@ export function DashboardPage() {
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Responses</p>
                     <p className="text-2xl font-extrabold text-white tracking-tight">{totalResponses}</p>
                     <p className="text-[10px] text-slate-400 flex items-center gap-1">
-                      <span className="text-indigo-400">⚡</span> Live activity
+                      <span className="text-brand-400">⚡</span> Live activity
                     </p>
                   </Card>
 
@@ -633,7 +645,7 @@ export function DashboardPage() {
                           cx="56"
                           cy="56"
                           r="44"
-                          className="text-indigo-500 stroke-current transition-all duration-500 ease-out"
+                          className="text-brand-500 stroke-current transition-all duration-500 ease-out"
                           strokeWidth="8"
                           fill="transparent"
                           strokeDasharray={276}
@@ -670,21 +682,21 @@ export function DashboardPage() {
 
                       {/* Bar 1 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-indigo-500 rounded-t-sm h-12 transition-all group-hover:bg-brand-400 relative">
+                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-12 transition-all group-hover:bg-brand-400 relative">
                           <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">12 r</span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Mon</span>
                       </div>
                       {/* Bar 2 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-indigo-500 rounded-t-sm h-20 transition-all group-hover:bg-brand-400 relative">
+                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-20 transition-all group-hover:bg-brand-400 relative">
                           <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">28 r</span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Tue</span>
                       </div>
                       {/* Bar 3 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-indigo-500 rounded-t-sm h-14 transition-all group-hover:bg-brand-400 relative">
+                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-14 transition-all group-hover:bg-brand-400 relative">
                           <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">16 r</span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Wed</span>
@@ -698,14 +710,14 @@ export function DashboardPage() {
                       </div>
                       {/* Bar 5 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-indigo-500 rounded-t-sm h-16 transition-all group-hover:bg-brand-400 relative">
+                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-16 transition-all group-hover:bg-brand-400 relative">
                           <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">22 r</span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Fri</span>
                       </div>
                       {/* Bar 6 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-indigo-500 rounded-t-sm h-8 transition-all group-hover:bg-brand-400 relative">
+                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-8 transition-all group-hover:bg-brand-400 relative">
                           <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">8 r</span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Sat</span>
@@ -729,7 +741,7 @@ export function DashboardPage() {
                         <div className="min-w-0 flex-1 leading-snug">
                           <p className="text-slate-300">
                             <span className="font-semibold text-slate-200">{act.user}</span> {act.action}{" "}
-                            <span className="text-indigo-400 font-semibold">{act.target}</span>
+                            <span className="text-brand-400 font-semibold">{act.target}</span>
                           </p>
                           <span className="text-[9px] text-slate-500">{act.time}</span>
                         </div>
@@ -801,7 +813,7 @@ export function DashboardPage() {
                         <span className="font-semibold text-slate-100">2,450 (100%)</span>
                       </div>
                       <div className="w-full bg-slate-900 rounded-full h-3">
-                        <div className="bg-indigo-500 h-3 rounded-full w-full" />
+                        <div className="bg-brand-650 h-3 rounded-full w-full" />
                       </div>
                     </div>
 
@@ -811,7 +823,7 @@ export function DashboardPage() {
                         <span className="font-semibold text-slate-100">2,082 (85%)</span>
                       </div>
                       <div className="w-full bg-slate-900 rounded-full h-3">
-                        <div className="bg-violet-500 h-3 rounded-full w-[85%]" />
+                        <div className="bg-brand-500 h-3 rounded-full w-[85%]" />
                       </div>
                     </div>
 
@@ -845,7 +857,7 @@ export function DashboardPage() {
                     <div className="flex items-center gap-3">
                       <span className="w-24 text-xs text-slate-400">Email Campaign</span>
                       <div className="flex-1 bg-slate-900 h-2.5 rounded-full overflow-hidden">
-                        <div className="bg-indigo-500 h-full w-[30%]" />
+                        <div className="bg-brand-600 h-full w-[30%]" />
                       </div>
                       <span className="text-xs font-semibold text-slate-300 w-10 text-right">30%</span>
                     </div>
@@ -853,7 +865,7 @@ export function DashboardPage() {
                     <div className="flex items-center gap-3">
                       <span className="w-24 text-xs text-slate-400">Web Embeds</span>
                       <div className="flex-1 bg-slate-900 h-2.5 rounded-full overflow-hidden">
-                        <div className="bg-violet-500 h-full w-[15%]" />
+                        <div className="bg-brand-400 h-full w-[15%]" />
                       </div>
                       <span className="text-xs font-semibold text-slate-300 w-10 text-right">15%</span>
                     </div>
@@ -971,14 +983,12 @@ export function DashboardPage() {
                     </div>
                     <button
                       onClick={() => setEmailNotifications(!emailNotifications)}
-                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${
-                        emailNotifications ? "bg-brand-500" : "bg-slate-800"
-                      }`}
+                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${emailNotifications ? "bg-brand-500" : "bg-slate-800"
+                        }`}
                     >
                       <span
-                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                          emailNotifications ? "translate-x-4" : "translate-x-0"
-                        }`}
+                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${emailNotifications ? "translate-x-4" : "translate-x-0"
+                          }`}
                       />
                     </button>
                   </div>
@@ -1037,11 +1047,10 @@ function SurveyCardRow({ survey, onDelete }: { survey: Survey; onDelete: () => v
             {survey.title}
           </Link>
           <span
-            className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-              survey.status === "published"
-                ? "bg-brand-500/10 text-brand-400"
-                : "bg-slate-800 text-slate-400"
-            }`}
+            className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${survey.status === "published"
+              ? "bg-brand-500/10 text-brand-400"
+              : "bg-slate-800 text-slate-400"
+              }`}
           >
             {survey.status}
           </span>
