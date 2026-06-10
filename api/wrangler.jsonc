@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sde-intern-task-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-12-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  // D1 is our system of record. Surveys/questions/responses/answers are
+  // relational and owner-scoped, so SQL beats KV blobs or R2 objects here.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "survey_builder",
+      "database_id": "local-survey-builder",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Dev-only signing secret for session cookies. In production set a real one:
+  //   wrangler secret put SESSION_SECRET
+  "vars": {
+    "SESSION_SECRET": "dev-only-insecure-secret-change-me"
+  }
+}

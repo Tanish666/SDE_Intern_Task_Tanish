@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+/* App is always dark — drive the dark: variant off the .dark class on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Brand palette — anchored on #1D9B5E. Enables bg-brand-500, text-brand-400, etc. */
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-brand-300: #4fd498;
+  --color-brand-400: #2cb872;
+  --color-brand-500: #1d9b5e;
+  --color-brand-600: #178a52;
+  --color-brand-700: #137045;
+
+  /* Ripple animation for <BackgroundRippleEffect />. Each cell reads its own
+     --delay / --duration so a click radiates outward as a wave. */
+  --animate-cell-ripple: cell-ripple var(--duration, 200ms) ease-out var(--delay, 0ms);
+
+  --animate-wave-slow: wave-slow 20s linear infinite;
+  --animate-wave-medium: wave-medium 14s linear infinite;
+
+  @keyframes cell-ripple {
+    0% {
+      opacity: 0.9;
+      transform: scale(1.08);
+    }
+    100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes wave-slow {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes wave-medium {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: #020617;
+  color: #e2e8f0;
+}
+
+/* Custom CSS masks for background grid fade-out */
+.mask-radial-at-top {
+  mask-image: radial-gradient(circle at top, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at top, black 30%, transparent 80%);
+}
+
+/* Custom scrollbar — dark track with a brand-green thumb.
+   WebKit (Chrome/Edge/Safari) + Firefox. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brand-500) #020617;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-brand-400), var(--color-brand-600));
+  border: 2px solid #020617;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-brand-300), var(--color-brand-500));
+}
+
+::-webkit-scrollbar-corner {
+  background: #020617;
+}

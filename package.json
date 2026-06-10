@@ -1,0 +1,30 @@
+{
+  "name": "sde-intern-task",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,green \"pnpm --filter sde-intern-task-api dev\" \"pnpm --filter sde-intern-task-web dev\"",
+    "build": "pnpm --filter sde-intern-task-web build",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "typecheck": "pnpm -r typecheck",
+    "db:migrate": "pnpm --filter sde-intern-task-api db:migrate"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd",
+      "@biomejs/biome",
+      "@tailwindcss/oxide"
+    ]
+  }
+}

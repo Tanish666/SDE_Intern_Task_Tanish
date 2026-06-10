@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install *)",
+      "Bash(pnpm --filter sde-intern-task-api cf-typegen)",
+      "Bash(pnpm check *)",
+      "Bash(pnpm check:fix)",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm --filter sde-intern-task-web typecheck)"
+    ]
+  }
+}
