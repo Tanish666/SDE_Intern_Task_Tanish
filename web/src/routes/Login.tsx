@@ -31,21 +31,15 @@ export function LoginPage() {
     <div className="min-h-full w-full grid md:grid-cols-2 font-sans bg-white">
       {/* Left Column: Form and Branding */}
       <div className="flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-24 bg-white text-slate-900">
-        
+
         {/* Header Branding */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <Link to="/" className="flex items-center gap-2 group">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-brand-500 text-sm font-black text-white shadow-sm group-hover:bg-brand-600 transition-colors">
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-500 text-sm font-black text-white shadow-sm group-hover:bg-brand-600 transition-colors">
               F
             </span>
-            <span className="text-xl font-bold tracking-tight text-slate-900">Formly</span>
+            <span className="text-2xl font-bold tracking-tight text-slate-900">Formly</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <span className="text-xs bg-slate-50 text-slate-600 px-3 py-1 rounded-full font-semibold flex items-center gap-1.5 border border-slate-100">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-pulse" />
-              Live
-            </span>
-          </div>
         </div>
 
         {/* Form Content */}
@@ -121,11 +115,8 @@ export function LoginPage() {
         {/* Centered Glassmorphic Box */}
         <div className="absolute inset-0 flex items-center justify-center p-8 lg:p-12">
           <div className="w-full max-w-[340px] rounded-[28px] border border-white/20 bg-white/10 p-8 backdrop-blur-md shadow-2xl flex flex-col gap-6 text-white select-none">
-            
-            {/* Circular outlined icon */}
-            <div className="h-10 w-10 rounded-full border-2 border-white flex items-center justify-center shadow-inner shrink-0">
-              <div className="h-3.5 w-3.5 rounded-full bg-white/80 animate-pulse" />
-            </div>
+
+
 
             <div className="space-y-3">
               <h2 className="text-2xl font-bold leading-tight tracking-tight text-white drop-shadow-sm">

@@ -9,7 +9,7 @@ import { useRequireAuth, useLogout } from "../lib/useAuth"
 // Custom inline SVG icons for premium visual aesthetics and zero dependencies
 function IconDashboard({ className = "h-5 w-5" }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-layout-collage">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`${className} icon icon-tabler icon-tabler-layout-collage`}>
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
       <path d="M10 4l4 16" />
@@ -28,7 +28,7 @@ function IconResponses({ className = "h-5 w-5" }) {
 
 function IconAnalytics({ className = "h-5 w-5" }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-device-analytics">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`${className} icon icon-tabler icon-tabler-device-analytics`}>
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1l0 -10" />
       <path d="M7 20l10 0" />
@@ -41,7 +41,7 @@ function IconAnalytics({ className = "h-5 w-5" }) {
 
 function IconTemplates({ className = "h-5 w-5" }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-template">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`${className} icon icon-tabler icon-tabler-template`}>
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M4 5a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1l0 -2" />
       <path d="M4 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6" />

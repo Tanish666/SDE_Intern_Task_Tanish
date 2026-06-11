@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import Lenis from "lenis"
 import { useEffect } from "react"
-import { Button } from "../components/ui"
 import { BackgroundRippleEffect } from "../components/ui/background-ripple-effect"
 import { Highlighter } from "../components/ui/highlighter"
 import { useMe } from "../lib/useAuth"
@@ -43,21 +42,57 @@ export function LandingPage() {
 
   return (
     <div className="min-h-full bg-slate-950">
-      <header className="relative z-50 border-b border-slate-800 bg-slate-900">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <motion.header initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 1, delay: 1.5 }} className="fixed top-5 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+        <div className="w-full max-w-5xl flex items-center justify-between px-6 py-2.5 rounded-full border border-slate-800/80 bg-[#161824]/80 backdrop-blur-lg shadow-[0_15px_40px_rgba(0,0,0,0.5)] pointer-events-auto transition-all duration-300">
           <Link to="/" className="flex items-center gap-2 text-lg font-bold text-slate-100">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand-500 text-sm text-white">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand-500 text-sm text-white font-black">
               F
             </span>
             Formly
           </Link>
+
+          {/* Middle navigation links matching reference design */}
+          <nav className="hidden md:flex items-center gap-1.5">
+            <button
+              onClick={() => {
+                const featuresSection = document.getElementById("features")
+                if (featuresSection) {
+                  featuresSection.scrollIntoView({ behavior: "smooth" })
+                }
+              }}
+              className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.15)] text-slate-100 text-xs font-semibold tracking-wide transition cursor-pointer hover:bg-white/10"
+            >
+              Features
+            </button>
+            <button
+              onClick={() => {
+                const testimonialsSection = document.getElementById("testimonials")
+                if (testimonialsSection) {
+                  testimonialsSection.scrollIntoView({ behavior: "smooth" })
+                }
+              }}
+              className="px-4 py-1.5 rounded-full text-slate-400 hover:text-slate-100 text-xs font-semibold tracking-wide transition cursor-pointer hover:bg-white/5"
+            >
+              Testimonials
+            </button>
+            <Link
+              to={ctaTo}
+              className="px-4 py-1.5 rounded-full text-slate-400 hover:text-slate-100 text-xs font-semibold tracking-wide transition cursor-pointer hover:bg-white/5"
+            >
+              Get Started
+            </Link>
+          </nav>
+
           <Link to={ctaTo}>
-            <Button variant={signedIn ? "primary" : "secondary"}>
+            <button
+              type="button"
+              className="px-5 py-2 rounded-full border border-slate-700/80 hover:border-slate-500/80 bg-transparent text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 cursor-pointer"
+            >
               {signedIn ? "Dashboard" : "Sign in"}
-            </Button>
+            </button>
           </Link>
         </div>
-      </header>
+      </motion.header>
 
       <main>
         {/* top blur */}
