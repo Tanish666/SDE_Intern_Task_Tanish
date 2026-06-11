@@ -31,7 +31,6 @@ export function LoginPage() {
     <div className="min-h-full w-full grid md:grid-cols-2 font-sans bg-white">
       {/* Left Column: Form and Branding */}
       <div className="flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-24 bg-white text-slate-900">
-
         {/* Header Branding */}
         <div className="flex items-center justify-center">
           <Link to="/" className="flex items-center gap-2 group">
@@ -68,7 +67,9 @@ export function LoginPage() {
 
             {login.error ? (
               <div className="text-xs text-red-500 font-semibold px-1">
-                {login.error instanceof ApiError ? login.error.message : "An error occurred. Please try again."}
+                {login.error instanceof ApiError
+                  ? login.error.message
+                  : "An error occurred. Please try again."}
               </div>
             ) : null}
 
@@ -92,7 +93,10 @@ export function LoginPage() {
         <div className="text-center pt-6 border-t border-slate-100/80">
           <div className="text-xs text-slate-500 font-medium">
             Write to our support team
-            <a href="mailto:support@formly.com" className="block text-brand-600 hover:text-brand-700 font-bold mt-1 transition-colors">
+            <a
+              href="mailto:support@formly.com"
+              className="block text-brand-600 hover:text-brand-700 font-bold mt-1 transition-colors"
+            >
               support@formly.com
             </a>
           </div>
@@ -100,7 +104,6 @@ export function LoginPage() {
             All rights reserved Formly © {new Date().getFullYear()}
           </p>
         </div>
-
       </div>
 
       {/* Right Column: Scenery and Premium Glassmorphism Card */}
@@ -115,15 +118,13 @@ export function LoginPage() {
         {/* Centered Glassmorphic Box */}
         <div className="absolute inset-0 flex items-center justify-center p-8 lg:p-12">
           <div className="w-full max-w-[340px] rounded-[28px] border border-white/20 bg-white/10 p-8 backdrop-blur-md shadow-2xl flex flex-col gap-6 text-white select-none">
-
-
-
             <div className="space-y-3">
               <h2 className="text-2xl font-bold leading-tight tracking-tight text-white drop-shadow-sm">
                 Formly the new gold standard for survey creation
               </h2>
               <p className="text-xs text-white/90 leading-relaxed font-medium">
-                The resulting interactive builder includes updated templates, advanced logic, and detailed analytics for every form.
+                The resulting interactive builder includes updated templates, advanced logic, and
+                detailed analytics for every form.
               </p>
             </div>
           </div>
@@ -132,4 +133,3 @@ export function LoginPage() {
     </div>
   )
 }
-

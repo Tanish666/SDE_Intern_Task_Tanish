@@ -1,15 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Link, useNavigate } from "@tanstack/react-router"
-import { useState, useMemo } from "react"
+import { useMemo, useState } from "react"
 import { Button, Card, Spinner } from "../components/ui"
 import { api } from "../lib/api"
 import type { Survey } from "../lib/types"
-import { useRequireAuth, useLogout } from "../lib/useAuth"
+import { useLogout, useRequireAuth } from "../lib/useAuth"
 
 // Custom inline SVG icons for premium visual aesthetics and zero dependencies
 function IconDashboard({ className = "h-5 w-5" }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`${className} icon icon-tabler icon-tabler-layout-collage`}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`${className} icon icon-tabler icon-tabler-layout-collage`}
+    >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -12" />
       <path d="M10 4l4 16" />
@@ -20,15 +29,34 @@ function IconDashboard({ className = "h-5 w-5" }) {
 
 function IconResponses({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+      />
     </svg>
   )
 }
 
 function IconAnalytics({ className = "h-5 w-5" }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`${className} icon icon-tabler icon-tabler-device-analytics`}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`${className} icon icon-tabler icon-tabler-device-analytics`}
+    >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1l0 -10" />
       <path d="M7 20l10 0" />
@@ -41,7 +69,16 @@ function IconAnalytics({ className = "h-5 w-5" }) {
 
 function IconTemplates({ className = "h-5 w-5" }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`${className} icon icon-tabler icon-tabler-template`}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`${className} icon icon-tabler icon-tabler-template`}
+    >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M4 5a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1l0 -2" />
       <path d="M4 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6" />
@@ -54,8 +91,18 @@ function IconTemplates({ className = "h-5 w-5" }) {
 
 function IconSettings({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+      />
       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
     </svg>
   )
@@ -63,23 +110,49 @@ function IconSettings({ className = "h-5 w-5" }) {
 
 function IconLogout({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+      />
     </svg>
   )
 }
 
 function IconSearch({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+      />
     </svg>
   )
 }
 
 function IconPlus({ className = "h-5 w-5" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2.5}
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
     </svg>
   )
@@ -87,23 +160,49 @@ function IconPlus({ className = "h-5 w-5" }) {
 
 function IconEdit({ className = "h-4 w-4" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+      />
     </svg>
   )
 }
 
 function IconTrash({ className = "h-4 w-4" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      />
     </svg>
   )
 }
 
 function IconMenu({ className = "h-6 w-6" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
   )
@@ -111,7 +210,13 @@ function IconMenu({ className = "h-6 w-6" }) {
 
 function IconX({ className = "h-6 w-6" }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
     </svg>
   )
@@ -129,10 +234,42 @@ interface Activity {
 }
 
 const SAMPLE_ACTIVITIES: Activity[] = [
-  { id: "1", user: "Zakir Horizontal", action: "submitted response on", target: "Feedback Form", time: "2m ago", avatar: "ZH", color: "bg-indigo-500" },
-  { id: "2", user: "Bagas Mahple", action: "published survey", target: "Product NPS Study", time: "1h ago", avatar: "BM", color: "bg-emerald-500" },
-  { id: "3", user: "Leonardo Samsul", action: "created template", target: "Employee Survey", time: "4h ago", avatar: "LS", color: "bg-purple-500" },
-  { id: "4", user: "Jhon Tosan", action: "joined survey workspace", target: "Main Team", time: "1d ago", avatar: "JT", color: "bg-amber-500" }
+  {
+    id: "1",
+    user: "Zakir Horizontal",
+    action: "submitted response on",
+    target: "Feedback Form",
+    time: "2m ago",
+    avatar: "ZH",
+    color: "bg-indigo-500",
+  },
+  {
+    id: "2",
+    user: "Bagas Mahple",
+    action: "published survey",
+    target: "Product NPS Study",
+    time: "1h ago",
+    avatar: "BM",
+    color: "bg-emerald-500",
+  },
+  {
+    id: "3",
+    user: "Leonardo Samsul",
+    action: "created template",
+    target: "Employee Survey",
+    time: "4h ago",
+    avatar: "LS",
+    color: "bg-purple-500",
+  },
+  {
+    id: "4",
+    user: "Jhon Tosan",
+    action: "joined survey workspace",
+    target: "Main Team",
+    time: "1d ago",
+    avatar: "JT",
+    color: "bg-amber-500",
+  },
 ]
 
 // Mock template dataset
@@ -146,12 +283,54 @@ interface SurveyTemplate {
 }
 
 const TEMPLATES: SurveyTemplate[] = [
-  { id: "t1", title: "Customer Satisfaction Survey", description: "Collect customer delight ratings and feedback on your services.", primaryColor: "#1d9b5e", icon: "⭐", category: "Feedback" },
-  { id: "t2", title: "Product NPS Study", description: "Evaluate user loyalty and understand recommendation rates.", primaryColor: "#6366f1", icon: "📈", category: "NPS" },
-  { id: "t3", title: "Employee Engagement Form", description: "Check in on your team's motivation, workplace satisfaction, and suggestions.", primaryColor: "#a855f7", icon: "🤝", category: "HR" },
-  { id: "t4", title: "Event Registration Questionnaire", description: "Log RSVP lists, dietary restrictions, and interest preferences.", primaryColor: "#ec4899", icon: "🎉", category: "Events" },
-  { id: "t5", title: "Website Usability Audit", description: "Understand direct bugs, layout feedback, and desktop experience issues.", primaryColor: "#06b6d4", icon: "💻", category: "UX" },
-  { id: "t6", title: "Market Research Questionnaire", description: "Gather insights on buyer demographics, purchase habits, and preferences.", primaryColor: "#f59e0b", icon: "🔍", category: "Marketing" }
+  {
+    id: "t1",
+    title: "Customer Satisfaction Survey",
+    description: "Collect customer delight ratings and feedback on your services.",
+    primaryColor: "#1d9b5e",
+    icon: "⭐",
+    category: "Feedback",
+  },
+  {
+    id: "t2",
+    title: "Product NPS Study",
+    description: "Evaluate user loyalty and understand recommendation rates.",
+    primaryColor: "#6366f1",
+    icon: "📈",
+    category: "NPS",
+  },
+  {
+    id: "t3",
+    title: "Employee Engagement Form",
+    description: "Check in on your team's motivation, workplace satisfaction, and suggestions.",
+    primaryColor: "#a855f7",
+    icon: "🤝",
+    category: "HR",
+  },
+  {
+    id: "t4",
+    title: "Event Registration Questionnaire",
+    description: "Log RSVP lists, dietary restrictions, and interest preferences.",
+    primaryColor: "#ec4899",
+    icon: "🎉",
+    category: "Events",
+  },
+  {
+    id: "t5",
+    title: "Website Usability Audit",
+    description: "Understand direct bugs, layout feedback, and desktop experience issues.",
+    primaryColor: "#06b6d4",
+    icon: "💻",
+    category: "UX",
+  },
+  {
+    id: "t6",
+    title: "Market Research Questionnaire",
+    description: "Gather insights on buyer demographics, purchase habits, and preferences.",
+    primaryColor: "#f59e0b",
+    icon: "🔍",
+    category: "Marketing",
+  },
 ]
 
 export function DashboardPage() {
@@ -229,12 +408,14 @@ export function DashboardPage() {
     const links = [
       { id: "dashboard", label: "Dashboard", icon: <IconDashboard /> },
       { id: "analytics", label: "Analytics", icon: <IconAnalytics /> },
-      { id: "templates", label: "Templates", icon: <IconTemplates /> }
+      { id: "templates", label: "Templates", icon: <IconTemplates /> },
     ]
 
     return (
       <div className="flex flex-col gap-1">
-        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 mb-2">Overview</p>
+        <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 mb-2">
+          Overview
+        </p>
         {links.map((link) => (
           <button
             key={link.id}
@@ -242,10 +423,11 @@ export function DashboardPage() {
               setActiveTab(link.id)
               setMobileSidebarOpen(false)
             }}
-            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === link.id
-              ? "bg-brand-500 text-white shadow-md shadow-brand-500/20"
-              : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-              }`}
+            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+              activeTab === link.id
+                ? "bg-brand-500 text-white shadow-md shadow-brand-500/20"
+                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+            }`}
           >
             {link.icon}
             {link.label}
@@ -283,7 +465,9 @@ export function DashboardPage() {
             {/* Collaborators / Team Block */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between px-3">
-                <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">Teammates</p>
+                <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                  Teammates
+                </p>
                 <button
                   onClick={() => alert("Add collaborator feature is under development!")}
                   className="text-slate-500 hover:text-brand-400 p-0.5"
@@ -295,33 +479,45 @@ export function DashboardPage() {
               <div className="flex flex-col gap-1.5 px-1">
                 <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-900/40 group transition">
                   <div className="relative">
-                    <span className="h-7 w-7 rounded-full bg-indigo-950 text-indigo-300 font-bold text-[10px] flex items-center justify-center border border-indigo-800">BM</span>
+                    <span className="h-7 w-7 rounded-full bg-indigo-950 text-indigo-300 font-bold text-[10px] flex items-center justify-center border border-indigo-800">
+                      BM
+                    </span>
                     <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 border border-slate-950" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-slate-300 truncate group-hover:text-slate-100">Bagas Mahple</p>
+                    <p className="text-xs font-semibold text-slate-300 truncate group-hover:text-slate-100">
+                      Bagas Mahple
+                    </p>
                     <p className="text-[10px] text-slate-500 truncate">Admin</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-900/40 group transition">
                   <div className="relative">
-                    <span className="h-7 w-7 rounded-full bg-amber-950 text-amber-300 font-bold text-[10px] flex items-center justify-center border border-amber-800">SD</span>
+                    <span className="h-7 w-7 rounded-full bg-amber-950 text-amber-300 font-bold text-[10px] flex items-center justify-center border border-amber-800">
+                      SD
+                    </span>
                     <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-amber-500 border border-slate-950" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-slate-300 truncate group-hover:text-slate-100">Sir Dandy</p>
+                    <p className="text-xs font-semibold text-slate-300 truncate group-hover:text-slate-100">
+                      Sir Dandy
+                    </p>
                     <p className="text-[10px] text-slate-500 truncate">Mentor</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-900/40 group transition">
                   <div className="relative">
-                    <span className="h-7 w-7 rounded-full bg-purple-950 text-purple-300 font-bold text-[10px] flex items-center justify-center border border-purple-800">JT</span>
+                    <span className="h-7 w-7 rounded-full bg-purple-950 text-purple-300 font-bold text-[10px] flex items-center justify-center border border-purple-800">
+                      JT
+                    </span>
                     <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-slate-500 border border-slate-950" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-slate-300 truncate group-hover:text-slate-100">Jhon Tosan</p>
+                    <p className="text-xs font-semibold text-slate-300 truncate group-hover:text-slate-100">
+                      Jhon Tosan
+                    </p>
                     <p className="text-[10px] text-slate-500 truncate">Collaborator</p>
                   </div>
                 </div>
@@ -332,13 +528,16 @@ export function DashboardPage() {
 
         {/* Settings / Sign-out Bottom block */}
         <div className="p-4 border-t border-slate-900/60 flex flex-col gap-1">
-          <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 mb-1">Preferences</p>
+          <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3 mb-1">
+            Preferences
+          </p>
           <button
             onClick={() => setActiveTab("settings")}
-            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === "settings"
-              ? "bg-slate-800 text-slate-100"
-              : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-              }`}
+            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+              activeTab === "settings"
+                ? "bg-slate-800 text-slate-100"
+                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+            }`}
           >
             <IconSettings />
             Settings
@@ -396,14 +595,20 @@ export function DashboardPage() {
 
                 {/* Team Section */}
                 <div className="flex flex-col gap-2">
-                  <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3">Teammates</p>
+                  <p className="text-[10px] font-bold tracking-wider text-slate-500 uppercase px-3">
+                    Teammates
+                  </p>
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/40">
-                      <span className="h-6 w-6 rounded-full bg-indigo-950 text-indigo-300 font-bold text-[9px] flex items-center justify-center border border-indigo-850">BM</span>
+                      <span className="h-6 w-6 rounded-full bg-indigo-950 text-indigo-300 font-bold text-[9px] flex items-center justify-center border border-indigo-850">
+                        BM
+                      </span>
                       <span className="text-xs text-slate-300">Bagas Mahple (Admin)</span>
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/40">
-                      <span className="h-6 w-6 rounded-full bg-amber-950 text-amber-300 font-bold text-[9px] flex items-center justify-center border border-amber-850">SD</span>
+                      <span className="h-6 w-6 rounded-full bg-amber-950 text-amber-300 font-bold text-[9px] flex items-center justify-center border border-amber-850">
+                        SD
+                      </span>
                       <span className="text-xs text-slate-300">Sir Dandy (Mentor)</span>
                     </div>
                   </div>
@@ -491,12 +696,15 @@ export function DashboardPage() {
 
                   <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                      <p className="text-xs font-extrabold tracking-widest text-brand-200 uppercase mb-1">ONLINE FEEDBACK</p>
+                      <p className="text-xs font-extrabold tracking-widest text-brand-200 uppercase mb-1">
+                        ONLINE FEEDBACK
+                      </p>
                       <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-2">
                         Welcome back, {profileName.split(" ")[0]} 👋
                       </h2>
                       <p className="text-xs md:text-sm text-emerald-50 max-w-md leading-relaxed">
-                        Gather feedback and analyze responses with Formly's interactive suite. Paint it in your brand color and start collecting data.
+                        Gather feedback and analyze responses with Formly's interactive suite. Paint
+                        it in your brand color and start collecting data.
                       </p>
                     </div>
                     <button
@@ -517,8 +725,12 @@ export function DashboardPage() {
                     <div className="absolute right-3 top-3 opacity-10 text-slate-400 group-hover:opacity-20 transition">
                       <IconDashboard className="h-8 w-8" />
                     </div>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Surveys</p>
-                    <p className="text-2xl font-extrabold text-white tracking-tight">{surveys.length}</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      Total Surveys
+                    </p>
+                    <p className="text-2xl font-extrabold text-white tracking-tight">
+                      {surveys.length}
+                    </p>
                     <p className="text-[10px] text-slate-400 flex items-center gap-1">
                       <span className="text-emerald-400">✓</span> {publishedCount} published
                     </p>
@@ -528,8 +740,12 @@ export function DashboardPage() {
                     <div className="absolute right-3 top-3 opacity-10 text-slate-400 group-hover:opacity-20 transition">
                       <IconResponses className="h-8 w-8" />
                     </div>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Responses</p>
-                    <p className="text-2xl font-extrabold text-white tracking-tight">{totalResponses}</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      Total Responses
+                    </p>
+                    <p className="text-2xl font-extrabold text-white tracking-tight">
+                      {totalResponses}
+                    </p>
                     <p className="text-[10px] text-slate-400 flex items-center gap-1">
                       <span className="text-brand-400">⚡</span> Live activity
                     </p>
@@ -539,8 +755,12 @@ export function DashboardPage() {
                     <div className="absolute right-3 top-3 opacity-10 text-slate-400 group-hover:opacity-20 transition">
                       <IconAnalytics className="h-8 w-8" />
                     </div>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Active Ratio</p>
-                    <p className="text-2xl font-extrabold text-white tracking-tight">{avgCompletionRate}%</p>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      Active Ratio
+                    </p>
+                    <p className="text-2xl font-extrabold text-white tracking-tight">
+                      {avgCompletionRate}%
+                    </p>
                     <p className="text-[10px] text-slate-400 flex items-center gap-1">
                       <span className="text-violet-400">●</span> Launch rate target
                     </p>
@@ -559,7 +779,9 @@ export function DashboardPage() {
                           </span>
                         )}
                       </h3>
-                      <p className="text-xs text-slate-500">Create, customize, and share questionnaires.</p>
+                      <p className="text-xs text-slate-500">
+                        Create, customize, and share questionnaires.
+                      </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
@@ -625,7 +847,9 @@ export function DashboardPage() {
                   {/* Circle Chart Header */}
                   <div>
                     <h3 className="font-bold text-sm text-slate-200">Overall Target Statistics</h3>
-                    <p className="text-[10px] text-slate-500">Track responses and progress towards targets</p>
+                    <p className="text-[10px] text-slate-500">
+                      Track responses and progress towards targets
+                    </p>
                   </div>
 
                   {/* Circular target element */}
@@ -655,7 +879,9 @@ export function DashboardPage() {
                       {/* Inner avatar initials */}
                       <div className="absolute flex flex-col items-center justify-center text-center">
                         <span className="text-xl font-black text-white">{avgCompletionRate}%</span>
-                        <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">Target</span>
+                        <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">
+                          Target
+                        </span>
                       </div>
                     </div>
                     <div className="mt-3 text-center px-4">
@@ -670,7 +896,9 @@ export function DashboardPage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <p className="text-xs font-bold text-slate-300">Daily responses volume</p>
-                      <span className="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">Weekly</span>
+                      <span className="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">
+                        Weekly
+                      </span>
                     </div>
 
                     {/* Chart layout wrapper */}
@@ -683,42 +911,54 @@ export function DashboardPage() {
                       {/* Bar 1 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
                         <div className="w-4.5 bg-brand-600 rounded-t-sm h-12 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">12 r</span>
+                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
+                            12 r
+                          </span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Mon</span>
                       </div>
                       {/* Bar 2 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
                         <div className="w-4.5 bg-brand-600 rounded-t-sm h-20 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">28 r</span>
+                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
+                            28 r
+                          </span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Tue</span>
                       </div>
                       {/* Bar 3 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
                         <div className="w-4.5 bg-brand-600 rounded-t-sm h-14 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">16 r</span>
+                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
+                            16 r
+                          </span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Wed</span>
                       </div>
                       {/* Bar 4 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
                         <div className="w-4.5 bg-brand-500 rounded-t-sm h-28 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">42 r</span>
+                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
+                            42 r
+                          </span>
                         </div>
                         <span className="text-[9px] text-brand-400 mt-1.5 font-bold">Thu</span>
                       </div>
                       {/* Bar 5 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
                         <div className="w-4.5 bg-brand-600 rounded-t-sm h-16 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">22 r</span>
+                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
+                            22 r
+                          </span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Fri</span>
                       </div>
                       {/* Bar 6 */}
                       <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
                         <div className="w-4.5 bg-brand-600 rounded-t-sm h-8 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">8 r</span>
+                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
+                            8 r
+                          </span>
                         </div>
                         <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Sat</span>
                       </div>
@@ -730,17 +970,22 @@ export function DashboardPage() {
                 <Card className="p-5 bg-slate-900/30 border-slate-900 space-y-4">
                   <div>
                     <h3 className="font-bold text-sm text-slate-200">Recent responses activity</h3>
-                    <p className="text-[10px] text-slate-500">Live feed of survey logs across your workspace</p>
+                    <p className="text-[10px] text-slate-500">
+                      Live feed of survey logs across your workspace
+                    </p>
                   </div>
                   <div className="flex flex-col gap-3">
                     {SAMPLE_ACTIVITIES.map((act) => (
                       <div key={act.id} className="flex gap-3 text-xs">
-                        <span className={`h-7 w-7 rounded-full shrink-0 font-extrabold text-[9px] text-white flex items-center justify-center ${act.color}`}>
+                        <span
+                          className={`h-7 w-7 rounded-full shrink-0 font-extrabold text-[9px] text-white flex items-center justify-center ${act.color}`}
+                        >
                           {act.avatar}
                         </span>
                         <div className="min-w-0 flex-1 leading-snug">
                           <p className="text-slate-300">
-                            <span className="font-semibold text-slate-200">{act.user}</span> {act.action}{" "}
+                            <span className="font-semibold text-slate-200">{act.user}</span>{" "}
+                            {act.action}{" "}
                             <span className="text-brand-400 font-semibold">{act.target}</span>
                           </p>
                           <span className="text-[9px] text-slate-500">{act.time}</span>
@@ -759,39 +1004,53 @@ export function DashboardPage() {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-900 pb-4">
                 <div>
                   <h2 className="text-xl font-bold text-white">Analytics Dashboard</h2>
-                  <p className="text-xs text-slate-500">Advanced analysis and responses funnel diagnostics.</p>
+                  <p className="text-xs text-slate-500">
+                    Advanced analysis and responses funnel diagnostics.
+                  </p>
                 </div>
                 <div className="flex items-center gap-2 bg-slate-900/50 p-1 border border-slate-800 rounded-lg">
-                  <button className="text-xs px-3 py-1 font-semibold bg-brand-500 text-white rounded-md">Last 30 Days</button>
-                  <button className="text-xs px-3 py-1 text-slate-400 hover:text-slate-200 rounded-md">All Time</button>
+                  <button className="text-xs px-3 py-1 font-semibold bg-brand-500 text-white rounded-md">
+                    Last 30 Days
+                  </button>
+                  <button className="text-xs px-3 py-1 text-slate-400 hover:text-slate-200 rounded-md">
+                    All Time
+                  </button>
                 </div>
               </div>
 
               {/* Conversion Stats Row */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <Card className="p-4 bg-slate-900/30 border-slate-900">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Views</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Total Views
+                  </p>
                   <p className="text-2xl font-black text-white mt-1">2,450</p>
                   <p className="text-[10px] text-emerald-400 flex items-center gap-1 mt-1">
                     <span>↑ 12.4%</span> vs last month
                   </p>
                 </Card>
                 <Card className="p-4 bg-slate-900/30 border-slate-900">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Completion Rate</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Completion Rate
+                  </p>
                   <p className="text-2xl font-black text-white mt-1">74.2%</p>
                   <p className="text-[10px] text-emerald-400 flex items-center gap-1 mt-1">
                     <span>↑ 4.1%</span> vs last month
                   </p>
                 </Card>
                 <Card className="p-4 bg-slate-900/30 border-slate-900">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Avg. Completion Time</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Avg. Completion Time
+                  </p>
                   <p className="text-2xl font-black text-white mt-1">2m 15s</p>
                   <p className="text-[10px] text-slate-400 flex items-center gap-1 mt-1">
                     <span>Stable</span> performance
                   </p>
                 </Card>
                 <Card className="p-4 bg-slate-900/30 border-slate-900">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Bounce Rate</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    Bounce Rate
+                  </p>
                   <p className="text-2xl font-black text-white mt-1">12.8%</p>
                   <p className="text-[10px] text-rose-400 flex items-center gap-1 mt-1">
                     <span>↓ 2.3%</span> improvement
@@ -803,8 +1062,12 @@ export function DashboardPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card className="p-5 bg-slate-900/30 border-slate-900 space-y-6">
                   <div>
-                    <h3 className="font-bold text-sm text-slate-200">Funnel Conversion Diagnostic</h3>
-                    <p className="text-[10px] text-slate-500">Track drop-off percentage from initial view to submit</p>
+                    <h3 className="font-bold text-sm text-slate-200">
+                      Funnel Conversion Diagnostic
+                    </h3>
+                    <p className="text-[10px] text-slate-500">
+                      Track drop-off percentage from initial view to submit
+                    </p>
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-1">
@@ -842,7 +1105,9 @@ export function DashboardPage() {
                 {/* Device and Channel metrics */}
                 <Card className="p-5 bg-slate-900/30 border-slate-900 space-y-6">
                   <div>
-                    <h3 className="font-bold text-sm text-slate-200">Respondent Acquisition Channels</h3>
+                    <h3 className="font-bold text-sm text-slate-200">
+                      Respondent Acquisition Channels
+                    </h3>
                     <p className="text-[10px] text-slate-500">Where survey submissions originate</p>
                   </div>
                   <div className="space-y-4">
@@ -851,7 +1116,9 @@ export function DashboardPage() {
                       <div className="flex-1 bg-slate-900 h-2.5 rounded-full overflow-hidden">
                         <div className="bg-brand-500 h-full w-[45%]" />
                       </div>
-                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">45%</span>
+                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">
+                        45%
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -859,7 +1126,9 @@ export function DashboardPage() {
                       <div className="flex-1 bg-slate-900 h-2.5 rounded-full overflow-hidden">
                         <div className="bg-brand-600 h-full w-[30%]" />
                       </div>
-                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">30%</span>
+                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">
+                        30%
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -867,7 +1136,9 @@ export function DashboardPage() {
                       <div className="flex-1 bg-slate-900 h-2.5 rounded-full overflow-hidden">
                         <div className="bg-brand-400 h-full w-[15%]" />
                       </div>
-                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">15%</span>
+                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">
+                        15%
+                      </span>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -875,7 +1146,9 @@ export function DashboardPage() {
                       <div className="flex-1 bg-slate-900 h-2.5 rounded-full overflow-hidden">
                         <div className="bg-cyan-500 h-full w-[10%]" />
                       </div>
-                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">10%</span>
+                      <span className="text-xs font-semibold text-slate-300 w-10 text-right">
+                        10%
+                      </span>
                     </div>
                   </div>
                 </Card>
@@ -888,12 +1161,17 @@ export function DashboardPage() {
             <div className="space-y-6 max-w-[1250px] mx-auto w-full">
               <div>
                 <h2 className="text-xl font-bold text-white">Survey Templates Library</h2>
-                <p className="text-xs text-slate-500">Select a pre-configured survey layout to build immediately.</p>
+                <p className="text-xs text-slate-500">
+                  Select a pre-configured survey layout to build immediately.
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {TEMPLATES.map((template) => (
-                  <Card key={template.id} className="p-5 bg-slate-900/30 border-slate-900 hover:border-slate-800/80 transition flex flex-col justify-between gap-4 group">
+                  <Card
+                    key={template.id}
+                    className="p-5 bg-slate-900/30 border-slate-900 hover:border-slate-800/80 transition flex flex-col justify-between gap-4 group"
+                  >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-3xl p-2 rounded-xl bg-slate-900 border border-slate-850 group-hover:scale-105 transition-all">
@@ -907,13 +1185,20 @@ export function DashboardPage() {
                         <h3 className="font-bold text-sm text-slate-100 group-hover:text-brand-400 transition">
                           {template.title}
                         </h3>
-                        <p className="text-xs text-slate-400 leading-relaxed mt-1">{template.description}</p>
+                        <p className="text-xs text-slate-400 leading-relaxed mt-1">
+                          {template.description}
+                        </p>
                       </div>
                     </div>
                     <div className="pt-3 border-t border-slate-900 flex items-center justify-between">
                       <span className="flex items-center gap-1.5">
-                        <span className="h-3.5 w-3.5 rounded-full" style={{ backgroundColor: template.primaryColor }} />
-                        <span className="text-[10px] text-slate-500 font-medium">Default Color</span>
+                        <span
+                          className="h-3.5 w-3.5 rounded-full"
+                          style={{ backgroundColor: template.primaryColor }}
+                        />
+                        <span className="text-[10px] text-slate-500 font-medium">
+                          Default Color
+                        </span>
                       </span>
                       <Button
                         onClick={() => createSurvey.mutate(template.title)}
@@ -934,20 +1219,26 @@ export function DashboardPage() {
             <div className="max-w-[800px] mx-auto w-full space-y-8">
               <div>
                 <h2 className="text-xl font-bold text-white">General Settings</h2>
-                <p className="text-xs text-slate-500">Configure your profile details and theme preferences.</p>
+                <p className="text-xs text-slate-500">
+                  Configure your profile details and theme preferences.
+                </p>
               </div>
 
               {settingsSaved && (
                 <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl text-xs flex items-center justify-between">
                   <span>✓ Settings changes saved successfully!</span>
-                  <button onClick={() => setSettingsSaved(false)} className="font-bold px-1">✕</button>
+                  <button onClick={() => setSettingsSaved(false)} className="font-bold px-1">
+                    ✕
+                  </button>
                 </div>
               )}
 
               <Card className="p-6 bg-slate-900/30 border-slate-900 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-slate-400">Account Owner Email</label>
+                    <label className="text-xs font-semibold text-slate-400">
+                      Account Owner Email
+                    </label>
                     <input
                       type="text"
                       value={user.email}
@@ -979,16 +1270,20 @@ export function DashboardPage() {
                   <div className="flex items-center justify-between p-3 bg-slate-900/20 border border-slate-900 rounded-xl mt-4">
                     <div>
                       <p className="text-xs font-semibold text-slate-200">Email Notifications</p>
-                      <p className="text-[10px] text-slate-500">Alerts when new survey responses land</p>
+                      <p className="text-[10px] text-slate-500">
+                        Alerts when new survey responses land
+                      </p>
                     </div>
                     <button
                       onClick={() => setEmailNotifications(!emailNotifications)}
-                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${emailNotifications ? "bg-brand-500" : "bg-slate-800"
-                        }`}
+                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${
+                        emailNotifications ? "bg-brand-500" : "bg-slate-800"
+                      }`}
                     >
                       <span
-                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${emailNotifications ? "translate-x-4" : "translate-x-0"
-                          }`}
+                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          emailNotifications ? "translate-x-4" : "translate-x-0"
+                        }`}
                       />
                     </button>
                   </div>
@@ -1024,7 +1319,7 @@ function SurveyCardRow({ survey, onDelete }: { survey: Survey; onDelete: () => v
     return new Date(survey.createdAt).toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
-      year: "numeric"
+      year: "numeric",
     })
   }, [survey.createdAt])
 
@@ -1047,16 +1342,19 @@ function SurveyCardRow({ survey, onDelete }: { survey: Survey; onDelete: () => v
             {survey.title}
           </Link>
           <span
-            className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${survey.status === "published"
-              ? "bg-brand-500/10 text-brand-400"
-              : "bg-slate-800 text-slate-400"
-              }`}
+            className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+              survey.status === "published"
+                ? "bg-brand-500/10 text-brand-400"
+                : "bg-slate-800 text-slate-400"
+            }`}
           >
             {survey.status}
           </span>
         </div>
         <p className="text-[10px] text-slate-500 mt-0.5 flex items-center gap-2">
-          <span>{survey.responseCount ?? 0} response{(survey.responseCount ?? 0) === 1 ? "" : "s"}</span>
+          <span>
+            {survey.responseCount ?? 0} response{(survey.responseCount ?? 0) === 1 ? "" : "s"}
+          </span>
           <span className="text-slate-700">•</span>
           <span>Created {formattedDate}</span>
         </p>
@@ -1094,4 +1392,3 @@ function SurveyCardRow({ survey, onDelete }: { survey: Survey; onDelete: () => v
     </Card>
   )
 }
-
