@@ -6,6 +6,14 @@ import { api } from "../lib/api"
 import type { Survey } from "../lib/types"
 import { useLogout, useRequireAuth } from "../lib/useAuth"
 
+// Apple-style avatars served by tapback. Pass a name for a deterministic avatar,
+// or omit it for a random one.
+function avatarUrl(name?: string) {
+  return name
+    ? `https://tapback.co/api/avatar/${encodeURIComponent(name)}.webp`
+    : "https://tapback.co/api/avatar.webp"
+}
+
 // Custom inline SVG icons for premium visual aesthetics and zero dependencies
 function IconDashboard({ className = "h-5 w-5" }) {
   return (
@@ -222,55 +230,23 @@ function IconX({ className = "h-6 w-6" }) {
   )
 }
 
-// Simulated dynamic activity notifications
-interface Activity {
-  id: string
-  user: string
-  action: string
-  target: string
-  time: string
-  avatar: string
-  color: string
+function IconDots({ className = "h-5 w-5" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <circle cx="12" cy="12" r="2" />
+      <circle cx="12" cy="5" r="2" />
+      <circle cx="12" cy="19" r="2" />
+    </svg>
+  )
 }
 
-const SAMPLE_ACTIVITIES: Activity[] = [
-  {
-    id: "1",
-    user: "Zakir Horizontal",
-    action: "submitted response on",
-    target: "Feedback Form",
-    time: "2m ago",
-    avatar: "ZH",
-    color: "bg-indigo-500",
-  },
-  {
-    id: "2",
-    user: "Bagas Mahple",
-    action: "published survey",
-    target: "Product NPS Study",
-    time: "1h ago",
-    avatar: "BM",
-    color: "bg-emerald-500",
-  },
-  {
-    id: "3",
-    user: "Leonardo Samsul",
-    action: "created template",
-    target: "Employee Survey",
-    time: "4h ago",
-    avatar: "LS",
-    color: "bg-purple-500",
-  },
-  {
-    id: "4",
-    user: "Jhon Tosan",
-    action: "joined survey workspace",
-    target: "Main Team",
-    time: "1d ago",
-    avatar: "JT",
-    color: "bg-amber-500",
-  },
-]
+
+
 
 // Mock template dataset
 interface SurveyTemplate {
@@ -344,6 +320,7 @@ export function DashboardPage() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState<boolean>(false)
   const [settingsSaved, setSettingsSaved] = useState<boolean>(false)
 
+
   // Settings state — persisted to localStorage so edits survive reloads
   const [profileName, setProfileName] = useState(
     () => localStorage.getItem("formly:profileName") || "Jason Ranti",
@@ -393,9 +370,10 @@ export function DashboardPage() {
     return Math.min(Math.round((publishedCount / surveys.length) * 100), 100)
   }, [surveys, publishedCount])
 
-  if (authLoading || !user) return <Spinner />
+  const displayCompletionRate = surveys.length > 0 ? avgCompletionRate : 32
 
-  const userInitial = user.email.charAt(0).toUpperCase()
+
+  if (authLoading || !user) return <Spinner />
 
   const handleSignOut = () => {
     if (confirm("Are you sure you want to sign out?")) {
@@ -423,11 +401,10 @@ export function DashboardPage() {
               setActiveTab(link.id)
               setMobileSidebarOpen(false)
             }}
-            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === link.id
-                ? "bg-brand-500 text-white shadow-md shadow-brand-500/20"
-                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-            }`}
+            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === link.id
+              ? "bg-brand-500 text-white shadow-md shadow-brand-500/20"
+              : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+              }`}
           >
             {link.icon}
             {link.label}
@@ -479,9 +456,11 @@ export function DashboardPage() {
               <div className="flex flex-col gap-1.5 px-1">
                 <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-900/40 group transition">
                   <div className="relative">
-                    <span className="h-7 w-7 rounded-full bg-indigo-950 text-indigo-300 font-bold text-[10px] flex items-center justify-center border border-indigo-800">
-                      BM
-                    </span>
+                    <img
+                      src={avatarUrl("Bagas Mahple")}
+                      alt="Bagas Mahple"
+                      className="h-7 w-7 rounded-full bg-slate-800 object-cover border border-indigo-800"
+                    />
                     <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-500 border border-slate-950" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -494,9 +473,11 @@ export function DashboardPage() {
 
                 <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-900/40 group transition">
                   <div className="relative">
-                    <span className="h-7 w-7 rounded-full bg-amber-950 text-amber-300 font-bold text-[10px] flex items-center justify-center border border-amber-800">
-                      SD
-                    </span>
+                    <img
+                      src={avatarUrl("Sir Dandy")}
+                      alt="Sir Dandy"
+                      className="h-7 w-7 rounded-full bg-slate-800 object-cover border border-amber-800"
+                    />
                     <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-amber-500 border border-slate-950" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -509,9 +490,11 @@ export function DashboardPage() {
 
                 <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-900/40 group transition">
                   <div className="relative">
-                    <span className="h-7 w-7 rounded-full bg-purple-950 text-purple-300 font-bold text-[10px] flex items-center justify-center border border-purple-800">
-                      JT
-                    </span>
+                    <img
+                      src={avatarUrl("Jhon Tosan")}
+                      alt="Jhon Tosan"
+                      className="h-7 w-7 rounded-full bg-slate-800 object-cover border border-purple-800"
+                    />
                     <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-slate-500 border border-slate-950" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -533,11 +516,10 @@ export function DashboardPage() {
           </p>
           <button
             onClick={() => setActiveTab("settings")}
-            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-              activeTab === "settings"
-                ? "bg-slate-800 text-slate-100"
-                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
-            }`}
+            className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${activeTab === "settings"
+              ? "bg-slate-800 text-slate-100"
+              : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+              }`}
           >
             <IconSettings />
             Settings
@@ -600,15 +582,19 @@ export function DashboardPage() {
                   </p>
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/40">
-                      <span className="h-6 w-6 rounded-full bg-indigo-950 text-indigo-300 font-bold text-[9px] flex items-center justify-center border border-indigo-850">
-                        BM
-                      </span>
+                      <img
+                        src={avatarUrl("Bagas Mahple")}
+                        alt="Bagas Mahple"
+                        className="h-6 w-6 rounded-full bg-slate-800 object-cover border border-indigo-850"
+                      />
                       <span className="text-xs text-slate-300">Bagas Mahple (Admin)</span>
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/40">
-                      <span className="h-6 w-6 rounded-full bg-amber-950 text-amber-300 font-bold text-[9px] flex items-center justify-center border border-amber-850">
-                        SD
-                      </span>
+                      <img
+                        src={avatarUrl("Sir Dandy")}
+                        alt="Sir Dandy"
+                        className="h-6 w-6 rounded-full bg-slate-800 object-cover border border-amber-850"
+                      />
                       <span className="text-xs text-slate-300">Sir Dandy (Mentor)</span>
                     </div>
                   </div>
@@ -667,12 +653,13 @@ export function DashboardPage() {
           <div className="flex items-center gap-6 text-sm">
             {/* User Profile display */}
             <div className="flex items-center gap-3 border-l border-slate-900 pl-6">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white font-bold text-xs flex items-center justify-center shadow shadow-brand-950/40">
-                {userInitial}
-              </div>
+              <img
+                src={avatarUrl(profileName)}
+                alt={profileName}
+                className="h-10 w-10 rounded-full bg-slate-800 object-cover shadow shadow-brand-950/40"
+              />
               <div className="text-left hidden lg:block">
                 <p className="text-xs font-semibold text-slate-200">{profileName}</p>
-                <p className="text-[10px] text-slate-500 truncate max-w-[150px]">{user.email}</p>
               </div>
             </div>
           </div>
@@ -845,153 +832,118 @@ export function DashboardPage() {
                 {/* Radial Target & Activity Graph Card */}
                 <Card className="p-5 bg-slate-900/30 border-slate-900 space-y-6">
                   {/* Circle Chart Header */}
-                  <div>
-                    <h3 className="font-bold text-sm text-slate-200">Overall Target Statistics</h3>
-                    <p className="text-[10px] text-slate-500">
-                      Track responses and progress towards targets
-                    </p>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-sm text-slate-200">Statistic</h3>
+                    <button className="text-slate-500 hover:text-slate-300 p-1 rounded hover:bg-slate-900/40 transition">
+                      <IconDots className="h-4 w-4" />
+                    </button>
                   </div>
 
-                  {/* Circular target element */}
+                  {/* Circular target element with user avatar in center */}
                   <div className="flex flex-col items-center justify-center py-4 bg-slate-900/10 rounded-xl border border-slate-900/40">
-                    <div className="relative flex items-center justify-center">
+                    <div className="relative flex items-center justify-center w-32 h-32">
                       {/* SVG circular progress ring */}
-                      <svg className="w-28 h-28 transform -rotate-90">
+                      <svg className="w-full h-full transform -rotate-90">
                         <circle
-                          cx="56"
-                          cy="56"
-                          r="44"
+                          cx="64"
+                          cy="64"
+                          r="56"
                           className="text-slate-850 stroke-current"
-                          strokeWidth="8"
+                          strokeWidth="2"
                           fill="transparent"
                         />
                         <circle
-                          cx="56"
-                          cy="56"
-                          r="44"
+                          cx="64"
+                          cy="64"
+                          r="56"
                           className="text-brand-500 stroke-current transition-all duration-500 ease-out"
-                          strokeWidth="8"
+                          strokeWidth="2"
                           fill="transparent"
-                          strokeDasharray={276}
-                          strokeDashoffset={276 - (276 * Math.min(avgCompletionRate, 100)) / 100}
+                          strokeDasharray={352}
+                          strokeDashoffset={352 - (352 * Math.min(displayCompletionRate, 100)) / 100}
                         />
                       </svg>
-                      {/* Inner avatar initials */}
-                      <div className="absolute flex flex-col items-center justify-center text-center">
-                        <span className="text-xl font-black text-white">{avgCompletionRate}%</span>
-                        <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">
-                          Target
-                        </span>
+                      {/* User avatar inside the ring */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <img
+                          src={avatarUrl(profileName)}
+                          alt={profileName}
+                          className="h-26 w-26 rounded-full bg-slate-800 object-cover border border-slate-900"
+                        />
+                      </div>
+                      {/* Ring progress badge */}
+                      <div className="absolute top-3 right-3 bg-brand-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-slate-950 shadow-md">
+                        {displayCompletionRate}%
                       </div>
                     </div>
-                    <div className="mt-3 text-center px-4">
-                      <p className="text-xs font-semibold text-slate-300">Target Level reached</p>
-                      <p className="text-[10px] text-slate-500 leading-normal mt-0.5">
-                        Your completion rate is calculated based on active versus draft surveys.
+                    <div className="mt-4 text-center px-4">
+                      <h4 className="text-xs font-bold text-slate-200 flex items-center justify-center gap-1">
+                        Good Morning, {profileName.split(" ")[0]} <span className="inline-block animate-pulse">🔥</span>
+                      </h4>
+                      <p className="text-[10px] text-slate-500 leading-normal mt-1 max-w-[200px] mx-auto">
+                        Continue your learning to achieve your target!
                       </p>
                     </div>
                   </div>
 
-                  {/* SVG Bar Chart for Feedback frequency */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-slate-300">Daily responses volume</p>
-                      <span className="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">
-                        Weekly
-                      </span>
-                    </div>
+                  {/* Bar Chart matching mockup exactly */}
+                  <div className="space-y-2">
+                    <div className="flex items-stretch gap-3 h-28">
+                      {/* Y Axis */}
+                      <div className="flex flex-col justify-between text-[9px] text-slate-600 font-bold py-1 select-none">
+                        <span>60</span>
+                        <span>40</span>
+                        <span>20</span>
+                      </div>
+                      {/* Bars Container */}
+                      <div className="flex-1 flex items-end justify-around px-4 bg-slate-950/40 rounded-xl border border-slate-900/60 relative overflow-hidden h-full">
+                        {/* Grid lines */}
+                        <div className="absolute inset-x-0 top-[20%] border-t border-slate-900/40 pointer-events-none" />
+                        <div className="absolute inset-x-0 top-[50%] border-t border-slate-900/40 pointer-events-none" />
+                        <div className="absolute inset-x-0 top-[80%] border-t border-slate-900/40 pointer-events-none" />
 
-                    {/* Chart layout wrapper */}
-                    <div className="h-32 flex items-end justify-between px-2 pt-4 bg-slate-900/20 rounded-lg border border-slate-900/60 relative">
-                      {/* Grid background lines */}
-                      <div className="absolute inset-x-0 top-1/4 border-t border-slate-900/60 pointer-events-none" />
-                      <div className="absolute inset-x-0 top-2/4 border-t border-slate-900/60 pointer-events-none" />
-                      <div className="absolute inset-x-0 top-3/4 border-t border-slate-900/60 pointer-events-none" />
+                        {/* Bar 1 */}
+                        <div className="w-5 bg-brand-500/20 rounded-lg h-[35%] transition-all hover:bg-brand-500/35 relative group cursor-pointer">
+                          <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow border border-slate-800">
+                            20 r
+                          </span>
+                        </div>
 
-                      {/* Bar 1 */}
-                      <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-12 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
-                            12 r
+                        {/* Bar 2 */}
+                        <div className="w-5 bg-brand-500 rounded-lg h-[65%] transition-all hover:bg-brand-600 relative group cursor-pointer">
+                          <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow border border-slate-800">
+                            45 r
                           </span>
                         </div>
-                        <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Mon</span>
-                      </div>
-                      {/* Bar 2 */}
-                      <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-20 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
-                            28 r
+
+                        {/* Bar 3 */}
+                        <div className="w-5 bg-brand-500/20 rounded-lg h-[45%] transition-all hover:bg-brand-500/35 relative group cursor-pointer">
+                          <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow border border-slate-800">
+                            25 r
                           </span>
                         </div>
-                        <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Tue</span>
-                      </div>
-                      {/* Bar 3 */}
-                      <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-14 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
-                            16 r
+
+                        {/* Bar 4 */}
+                        <div className="w-5 bg-brand-500 rounded-lg h-[90%] transition-all hover:bg-brand-600 relative group cursor-pointer">
+                          <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow border border-slate-800">
+                            60 r
                           </span>
                         </div>
-                        <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Wed</span>
-                      </div>
-                      {/* Bar 4 */}
-                      <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-brand-500 rounded-t-sm h-28 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
-                            42 r
+
+                        {/* Bar 5 */}
+                        <div className="w-5 bg-brand-500/20 rounded-lg h-[35%] transition-all hover:bg-brand-500/35 relative group cursor-pointer">
+                          <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow border border-slate-800">
+                            20 r
                           </span>
                         </div>
-                        <span className="text-[9px] text-brand-400 mt-1.5 font-bold">Thu</span>
-                      </div>
-                      {/* Bar 5 */}
-                      <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-16 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
-                            22 r
-                          </span>
-                        </div>
-                        <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Fri</span>
-                      </div>
-                      {/* Bar 6 */}
-                      <div className="flex flex-col items-center w-8 group z-10 cursor-pointer">
-                        <div className="w-4.5 bg-brand-600 rounded-t-sm h-8 transition-all group-hover:bg-brand-400 relative">
-                          <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-slate-200 text-[8px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-md border border-slate-800">
-                            8 r
-                          </span>
-                        </div>
-                        <span className="text-[9px] text-slate-500 mt-1.5 font-medium">Sat</span>
                       </div>
                     </div>
-                  </div>
-                </Card>
-
-                {/* Simulated Recent Activity Feed */}
-                <Card className="p-5 bg-slate-900/30 border-slate-900 space-y-4">
-                  <div>
-                    <h3 className="font-bold text-sm text-slate-200">Recent responses activity</h3>
-                    <p className="text-[10px] text-slate-500">
-                      Live feed of survey logs across your workspace
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    {SAMPLE_ACTIVITIES.map((act) => (
-                      <div key={act.id} className="flex gap-3 text-xs">
-                        <span
-                          className={`h-7 w-7 rounded-full shrink-0 font-extrabold text-[9px] text-white flex items-center justify-center ${act.color}`}
-                        >
-                          {act.avatar}
-                        </span>
-                        <div className="min-w-0 flex-1 leading-snug">
-                          <p className="text-slate-300">
-                            <span className="font-semibold text-slate-200">{act.user}</span>{" "}
-                            {act.action}{" "}
-                            <span className="text-brand-400 font-semibold">{act.target}</span>
-                          </p>
-                          <span className="text-[9px] text-slate-500">{act.time}</span>
-                        </div>
-                      </div>
-                    ))}
+                    {/* X Axis */}
+                    <div className="flex text-[9px] text-slate-500 font-bold select-none pl-7 pr-2">
+                      <span className="w-[40%] text-center">1-10 Aug</span>
+                      <span className="w-[40%] text-center">11-20 Aug</span>
+                      <span className="w-[20%] text-center">21-30 Aug</span>
+                    </div>
                   </div>
                 </Card>
               </div>
@@ -1276,14 +1228,12 @@ export function DashboardPage() {
                     </div>
                     <button
                       onClick={() => setEmailNotifications(!emailNotifications)}
-                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${
-                        emailNotifications ? "bg-brand-500" : "bg-slate-800"
-                      }`}
+                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out outline-none ${emailNotifications ? "bg-brand-500" : "bg-slate-800"
+                        }`}
                     >
                       <span
-                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                          emailNotifications ? "translate-x-4" : "translate-x-0"
-                        }`}
+                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${emailNotifications ? "translate-x-4" : "translate-x-0"
+                          }`}
                       />
                     </button>
                   </div>
@@ -1342,11 +1292,10 @@ function SurveyCardRow({ survey, onDelete }: { survey: Survey; onDelete: () => v
             {survey.title}
           </Link>
           <span
-            className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-              survey.status === "published"
-                ? "bg-brand-500/10 text-brand-400"
-                : "bg-slate-800 text-slate-400"
-            }`}
+            className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${survey.status === "published"
+              ? "bg-brand-500/10 text-brand-400"
+              : "bg-slate-800 text-slate-400"
+              }`}
           >
             {survey.status}
           </span>

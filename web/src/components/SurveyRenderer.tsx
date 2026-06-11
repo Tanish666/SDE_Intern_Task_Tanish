@@ -24,7 +24,10 @@ export function SurveyRenderer({
   disabled,
 }: RendererProps) {
   return (
-    <div className="mx-auto w-full max-w-xl">
+    <div
+      className="mx-auto w-full max-w-xl"
+      style={{ "--survey-primary": primaryColor } as React.CSSProperties}
+    >
       <div className="mb-6 border-b-4 pb-4" style={{ borderColor: primaryColor }}>
         {logoUrl && (
           <img
@@ -92,7 +95,7 @@ function QuestionField({
           disabled={disabled}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-brand-500"
+          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-[var(--survey-primary)] focus:ring-2 focus:ring-[var(--survey-primary)]/20"
           placeholder="Your answer"
         />
       )}
@@ -103,7 +106,7 @@ function QuestionField({
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
           rows={4}
-          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-brand-500"
+          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-[var(--survey-primary)] focus:ring-2 focus:ring-[var(--survey-primary)]/20"
           placeholder="Your answer"
         />
       )}

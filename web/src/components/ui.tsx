@@ -60,9 +60,20 @@ export function Label({ children }: { children: ReactNode }) {
   )
 }
 
-export function Card({ className = "", children }: { className?: string; children: ReactNode }) {
+export function Card({
+  className = "",
+  style,
+  children,
+}: {
+  className?: string
+  style?: React.CSSProperties
+  children: ReactNode
+}) {
   return (
-    <div className={`rounded-xl border border-slate-800 bg-slate-900 shadow-sm ${className}`}>
+    <div
+      className={`rounded-xl border border-slate-800 bg-slate-900 shadow-sm ${className}`}
+      style={style}
+    >
       {children}
     </div>
   )
